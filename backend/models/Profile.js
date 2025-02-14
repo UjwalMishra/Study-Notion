@@ -7,8 +7,8 @@ const profileSchema = new mongoose.Schema(
       trim: true,
       enum: ["Male", "Female", "Other"],
     },
-    dob: {
-      type: Date,
+    age: {
+      type: Number,
     },
     about: {
       type: String,

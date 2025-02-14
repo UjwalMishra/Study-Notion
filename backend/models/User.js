@@ -34,22 +34,28 @@ const userSchema = new mongoose.Schema(
       required: true,
       ref: "Profile",
     },
+    image: {
+      type: String,
+      required: true,
+    },
     courses: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Course",
       },
     ],
-    image: {
-      type: String,
-      required: true,
-    },
     courseProgress: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "CourseProgress",
       },
     ],
+    resetPassToken: {
+      type: String,
+    },
+    resetPassExpirationTime: {
+      type: Date,
+    },
   },
   { timestamps: true }
 );
