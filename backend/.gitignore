@@ -1,1 +1,5 @@
-node_modules
+# Ignore node_modules (dependencies)
+node_modules/
+
+# Ignore environment variables
+.env

@@ -173,7 +173,7 @@ exports.signUp = async (req, res) => {
 };
 
 //3. login
-const login = async (req, res) => {
+exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
     //validations
@@ -229,7 +229,7 @@ const login = async (req, res) => {
 };
 
 //4. change password
-const changePassword = async (req, res) => {
+exports.changePassword = async (req, res) => {
   try {
     const { email, oldPassword, newPassword, confirmNewPassword } = req.body;
     //validations

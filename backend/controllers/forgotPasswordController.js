@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const { sendMail } = require("../utils/");
 
 //1. reset password token
-const resetPasswordToken = async (req, res) => {
+exports.resetPasswordToken = async (req, res) => {
   try {
     const { email } = req.body;
     if (!email) {
