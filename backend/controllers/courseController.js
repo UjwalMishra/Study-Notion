@@ -1,4 +1,4 @@
-const Tag = require("../models/Tags");
+const Category = require("../models/Category");
 const Course = require("../models/Course");
 const User = require("../models/User");
 const uploadFileToCloudinary = require("../utils/cloudinaryFileUploader");
@@ -12,7 +12,7 @@ exports.createCourrse = async (req, res) => {
       courseLanguage,
       coursePrice,
       otherInfo,
-      tag,
+      category,
     } = req.body;
     //fetch thumbnail
     const thumbnail = req.file;
@@ -23,7 +23,7 @@ exports.createCourrse = async (req, res) => {
       !courseLanguage ||
       !coursePrice ||
       !otherInfo ||
-      !tag
+      !category
     ) {
       return res.status(400).json({
         success: false,
@@ -48,12 +48,12 @@ exports.createCourrse = async (req, res) => {
       });
     }
     console.log("Instructor : ", instructorDetails);
-    //validate tag
-    const tagDetails = await Tag.findById(tag);
-    if (!tagDetails) {
+    //validate category
+    const categoryDetails = await Category.findById(category);
+    if (!categoryDetails) {
       return res.status(400).json({
         success: false,
-        message: "Tag not found",
+        message: "category not found",
       });
     }
 
@@ -70,7 +70,7 @@ exports.createCourrse = async (req, res) => {
       coursePrice,
       otherInfo,
       instructor: instructorDetails._id,
-      tag: tagDetails._id,
+      category: categoryDetails._id,
       thumbnail: uploadThumbnail.secure_url,
     });
     console.log("Url of img : ", uploadThumbnail.secure_url);
@@ -80,9 +80,9 @@ exports.createCourrse = async (req, res) => {
     instructorDetails.courses.push(course._id);
     await instructorDetails.save();
 
-    //update tag object i.e add this course array of tag schema
-    tagDetails.courses.push(course._id);
-    await tagDetails.save();
+    //update category object i.e add this course array of category schema
+    categoryDetails.courses.push(course._id);
+    await categoryDetails.save();
 
     //return res
     res.status(200).json({
@@ -111,11 +111,11 @@ exports.getAllCourses = async (req, res) => {
         coursePrice: true,
         thumbnail: true,
         instructor: true,
-        tag: true,
+        category: true,
       }
     )
       .populate("instructor")
-      .populate("tag");
+      .populate("category");
 
     res.status(200).json({
       success: true,

@@ -1,48 +1,48 @@
 const mongoose = require("mongoose");
-const Tag = require("../models/Tags");
+const Category = require("../models/Category");
 
-exports.createTag = async (req, res) => {
+exports.createcategory = async (req, res) => {
   try {
     const { name, description } = req.body;
     //validations
     if (!name || !description) {
       return res.status(400).json({ message: "Please fill in all fields" });
     }
-    //create tag
-    const tag = {
+    //create category
+    const category = {
       name,
       description,
     };
     //save to database
-    const newTag = await Tag.create(tag);
-    console.log("Tag created : ", newTag);
+    const newcategory = await Category.create(category);
+    console.log("category created : ", newcategory);
     //res
     return res.status(200).json({
       success: true,
-      message: "Tag created successfully",
+      message: "category created successfully",
     });
   } catch (err) {
     console.log(err);
     return res.status(500).json({
       success: false,
-      message: "Internal Server Error while creating tag",
+      message: "Internal Server Error while creating category",
     });
   }
 };
 
-exports.getAllTags = async (req, res) => {
+exports.getAllcategories = async (req, res) => {
   try {
-    const tags = await Tag.find();
-    console.log("All Tags : ", tags);
+    const categories = await Category.find();
+    console.log("All categories : ", categories);
     return res.status(200).json({
       success: true,
-      tags,
+      categories,
     });
   } catch (err) {
     console.log(err);
     return res.status(500).json({
       success: false,
-      message: "Internal server error while fetching tags",
+      message: "Internal server error while fetching categories",
     });
   }
 };
