@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Category = require("../models/Category");
 
-exports.createcategory = async (req, res) => {
+exports.createCategory = async (req, res) => {
   try {
     const { name, description } = req.body;
     //validations
@@ -30,7 +30,7 @@ exports.createcategory = async (req, res) => {
   }
 };
 
-exports.getAllcategories = async (req, res) => {
+exports.getAllCategories = async (req, res) => {
   try {
     const categories = await Category.find();
     console.log("All categories : ", categories);
