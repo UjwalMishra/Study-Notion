@@ -30,6 +30,7 @@ const courseSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    //here we store id of sections
     courseContent: [
       {
         type: mongoose.Schema.Types.ObjectId,

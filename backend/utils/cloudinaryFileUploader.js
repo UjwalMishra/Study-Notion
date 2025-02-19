@@ -2,16 +2,21 @@ const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
 const storage = multer.memoryStorage();
 
+const supportedTypes = [
+  "image/jpeg",
+  "image/png",
+  "image/jpg",
+  "image/webp",
+  "video/mp4",
+  "video/mpeg",
+  "video/quicktime",
+  "video/x-msvideo",
+];
+
 exports.upload = multer({
   storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB file limit
+  limits: { fileSize: 50 * 1024 * 1024 }, // Increased limit to 50MB for videos
   fileFilter: (req, file, cb) => {
-    const supportedTypes = [
-      "image/jpeg",
-      "image/png",
-      "image/jpg",
-      "image/webp",
-    ];
     if (supportedTypes.includes(file.mimetype)) {
       cb(null, true);
     } else {

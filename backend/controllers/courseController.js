@@ -34,7 +34,7 @@ exports.createCourrse = async (req, res) => {
     if (!thumbnail) {
       return res.status(400).json({
         success: false,
-        message: "Error adding blog",
+        message: "Thumbnail is required",
       });
     }
 

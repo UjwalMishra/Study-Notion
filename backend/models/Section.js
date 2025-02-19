@@ -7,6 +7,7 @@ const sectionSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    //here we store the id of the sub-sections
     subSection: [
       {
         type: mongoose.Schema.Types.ObjectId,
