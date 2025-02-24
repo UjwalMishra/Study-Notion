@@ -50,6 +50,7 @@ const userSchema = new mongoose.Schema(
         ref: "CourseProgress",
       },
     ],
+    //for reset password
     resetPassToken: {
       type: String,
     },
