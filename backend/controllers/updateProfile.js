@@ -82,7 +82,7 @@ exports.deleteAccount = async (req, res) => {
       });
     }
 
-    //find cron job ? and also need to schedule tje delete profile operatrion i.e deletion of profile should not be immediate
+    //find cron job ? and also need to schedule the delete profile operatrion i.e deletion of profile should not be immediate
 
     //delete profile
     await Profile.findByIdAndDelete(profileId);

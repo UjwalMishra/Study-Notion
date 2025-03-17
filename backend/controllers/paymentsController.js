@@ -11,12 +11,13 @@ exports.capturePayment = async (req, res) => {
     const { courseId } = req.body;
 
     //validate
-    if (!userId || !courseId) {
+    if (!courseId) {
       return res.status(400).json({
         success: false,
-        message: "UserId or CourseId is missing",
+        message: "CourseId is missing",
       });
     }
+
     //get course details
     const course = await Course.findById(courseId);
     if (!course) {
@@ -25,12 +26,9 @@ exports.capturePayment = async (req, res) => {
         message: "Course not found",
       });
     }
-    // if user have already purchased the course
 
-    // const uid = new mongoose.Types.ObjectId(userId);
-    const uid = mongoose.Types.ObjectId.isValid(userId)
-      ? new mongoose.Types.ObjectId(userId)
-      : null;
+    // <------------if user have already purchased the course-------------->
+    const uid = new mongoose.Types.ObjectId(userId);
 
     if (!uid) {
       return res.status(400).json({
