@@ -24,7 +24,9 @@ const getInitialsAvatar = (name) => {
 exports.sendOtp = async (req, res) => {
   try {
     const { email } = req.body;
-
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
     const isUserAlreadyExists = await User.findOne({ email });
     if (isUserAlreadyExists) {
       return res.status(401).json({
@@ -112,7 +114,7 @@ exports.signUp = async (req, res) => {
     }
 
     //find most recent otp coresponding to the email
-    const recentOtp = await Otp.findOne({ email: email }).sort({
+    const recentOtp = await OTP.findOne({ email: email }).sort({
       createdAt: -1, //createdAt : -1 -> sorts in decending order means newly created are at last
     });
     console.log("otp from db", recentOtp);
@@ -196,7 +198,7 @@ exports.login = async (req, res) => {
     if (!isValidPassword) {
       return res.status(401).json({
         success: false,
-        message: "Invalid password",
+        message: "Wrong password",
       });
     }
     //remove password from user object

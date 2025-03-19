@@ -13,9 +13,9 @@ const supportedTypes = [
   "video/x-msvideo",
 ];
 
-exports.upload = multer({
+const upload = multer({
   storage: storage,
-  limits: { fileSize: 50 * 1024 * 1024 }, // Increased limit to 50MB for videos
+  limits: { fileSize: 50 * 1024 * 1024 }, // 50MB limit
   fileFilter: (req, file, cb) => {
     if (supportedTypes.includes(file.mimetype)) {
       cb(null, true);
@@ -41,4 +41,4 @@ async function uploadFileToCloudinary(buffer, folder) {
   });
 }
 
-module.exports = uploadFileToCloudinary;
+module.exports = { upload, uploadFileToCloudinary };

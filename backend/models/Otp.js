@@ -23,7 +23,7 @@ const otpSchema = new mongoose.Schema(
 
 async function sendVarificationMail(email, otp) {
   try {
-    const mailRes = sendMail(email, "Mail from Study-Notion", otp);
+    const mailRes = sendMail(email, "Mail from Study-Notion", `OTP is ${otp}`);
     console.log("Mail sent : ", mailRes);
   } catch (err) {
     console.log("error occured while sending mail in models/Otp ->", err);
