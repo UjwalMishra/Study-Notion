@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Category = require("../models/Category");
+const Course = require("../models/Course");
 
 exports.createCategory = async (req, res) => {
   try {
@@ -43,6 +44,56 @@ exports.getAllCategories = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Internal server error while fetching categories",
+    });
+  }
+};
+
+//fetch courses by category
+exports.getCategoryDetails = async (req, res) => {
+  try {
+    const { categoryId } = req.body;
+    if (!categoryId) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide category id",
+      });
+    }
+
+    //selected category courses
+    const selectedCategoryCourses = await Category.findById(categoryId)
+      .populate("courses")
+      .exec();
+    if (!selectedCategoryCourses) {
+      return res.status(404).json({
+        success: false,
+        message: "Courses for selected category not found",
+      });
+    }
+
+    //top selling courses
+    const topSellingCourses = await Course.find().sort({
+      studentsEnrolled: -1,
+    });
+
+    //other courses
+    const otherCourses = await Category.find({
+      _id: { $ne: categoryId },
+    }).populate("courses");
+
+    //return res
+    return res.status(200).json({
+      success: true,
+      data: {
+        selectedCategoryCourses,
+        topSellingCourses: topSellingCourses.slice(0, 5),
+        otherCourses,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error while fetching category details",
     });
   }
 };
