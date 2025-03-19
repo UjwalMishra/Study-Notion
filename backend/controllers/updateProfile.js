@@ -107,7 +107,7 @@ exports.deleteAccount = async (req, res) => {
 };
 
 //get user details
-export const getUserDetails = async (req, res) => {
+exports.getUserDetails = async (req, res) => {
   try {
     const userId = req.user._id;
 

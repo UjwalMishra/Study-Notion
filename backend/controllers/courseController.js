@@ -5,7 +5,7 @@ const uploadFileToCloudinary = require("../utils/cloudinaryFileUploader");
 require("dotenv").config();
 
 //1. course creation
-exports.createCourrse = async (req, res) => {
+exports.createCourse = async (req, res) => {
   try {
     const {
       courseName,
