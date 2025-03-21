@@ -8,16 +8,17 @@ const {
   updateProfile,
   deleteAccount,
 } = require("../controllers/updateProfile");
+const { auth } = require("../middlewares/authMiddleware");
 
 // ********************************************************************************************************
 //                                      Profile routes
 // ********************************************************************************************************
 
 //route for getting user profile
-router.get("/getUserDeatils", getUserDetails);
+router.get("/getUserDetails", auth, getUserDetails);
 //route for updating profile
-router.put("/updateProfile", updateProfile);
+router.put("/updateProfile", auth, updateProfile);
 //route for deleting profile
-router.delete("/deleteProfile", deleteAccount);
+router.delete("/deleteProfile", auth, deleteAccount);
 
 module.exports = router;

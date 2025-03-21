@@ -24,10 +24,10 @@ exports.resetPasswordToken = async (req, res) => {
     console.log("token generate in password reset : ", token);
     //save token in user document
     const updatedUser = await User.findByIdAndUpdate(
-      { email },
+      user._id,
       {
-        resetPasswordToken: token,
-        resetPasswordExpire: Date.now() + 5 * 60 * 1000,
+        resetPassToken: token,
+        resetPassExpirationTime: Date.now() + 5 * 60 * 1000,
       },
       { new: true }
     );
@@ -39,6 +39,7 @@ exports.resetPasswordToken = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Email sent successfully",
+      token: token,
     });
   } catch (err) {
     console.log(err);
@@ -66,7 +67,7 @@ exports.resetPass = async (req, res) => {
       });
     }
     //validate token
-    const user = await User.findOne({ resetPasswordToken: token });
+    const user = await User.findOne({ resetPassToken: token });
     if (!user) {
       return res.status(404).json({
         success: false,

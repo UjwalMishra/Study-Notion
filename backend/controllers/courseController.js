@@ -1,7 +1,11 @@
 const Category = require("../models/Category");
 const Course = require("../models/Course");
+const Section = require("../models/Section");
+const SubSection = require("../models/SubSection");
 const User = require("../models/User");
-const uploadFileToCloudinary = require("../utils/cloudinaryFileUploader");
+const { uploadImageToCloudinary } = require("../utils/cloudinaryFileUploader");
+const cloudinary = require("cloudinary").v2;
+
 require("dotenv").config();
 
 //1. course creation
@@ -15,8 +19,12 @@ exports.createCourse = async (req, res) => {
       otherInfo,
       category,
     } = req.body;
-    //fetch thumbnail
-    const thumbnail = req.file;
+    // Get thumbnail image from request files
+    const thumbnail = req.files.thumbnail;
+
+    console.log("Received File:", req.files);
+    console.log("Request Body:", req.body);
+
     //validations
     if (
       !courseName ||
@@ -40,7 +48,7 @@ exports.createCourse = async (req, res) => {
     }
 
     //fetching instructor's info
-    const userId = req.user.id;
+    const userId = req.user._id;
     const instructorDetails = await User.findById(userId);
     if (!instructorDetails) {
       return res.status(400).json({
@@ -59,10 +67,11 @@ exports.createCourse = async (req, res) => {
     }
 
     //upload image to cloudinary
-    const uploadThumbnail = await uploadFileToCloudinary(
-      thumbnail.buffer,
-      process.env.CLOUDINARY_FOLDER_NAME
+    const uploadThumbnail = await uploadImageToCloudinary(
+      thumbnail,
+      process.env.FOLDER_NAME
     );
+
     //create course
     const course = await Course.create({
       courseName,
@@ -73,6 +82,7 @@ exports.createCourse = async (req, res) => {
       instructor: instructorDetails._id,
       category: categoryDetails._id,
       thumbnail: uploadThumbnail.secure_url,
+      // cloudinary_public_id ---> pending
     });
     console.log("Url of img : ", uploadThumbnail.secure_url);
     console.log("course created : ", course);
@@ -178,6 +188,98 @@ exports.getCourseDetails = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Error fetching course details",
+    });
+  }
+};
+
+//3. delete course
+exports.deleteCourse = async (req, res) => {
+  try {
+    const { courseId } = req.body;
+
+    // Validate input
+    if (!courseId) {
+      return res.status(400).json({ message: "Course ID is required" });
+    }
+
+    // Find the course
+    const course = await Course.findById(courseId);
+    if (!course) {
+      return res.status(404).json({ message: "Course not found" });
+    }
+
+    // Unenroll students from the course
+    const studentsEnrolled = course.studentsEnrolled;
+    for (const studentId of studentsEnrolled) {
+      await User.findByIdAndUpdate(studentId, {
+        $pull: { courses: courseId },
+      });
+    }
+
+    // Delete sections and sub-sections
+    const courseSections = course.courseContent;
+    for (const sectionId of courseSections) {
+      // Fetch section details
+      const section = await Section.findById(sectionId);
+      if (section) {
+        const subSections = section.subSection;
+
+        // Fetch all sub-sections
+        const subSectionDocs = await SubSection.find({
+          _id: { $in: subSections },
+        });
+
+        // Delete associated videos from Cloudinary
+        for (const subSection of subSectionDocs) {
+          if (subSection.cloudinary_public_id) {
+            try {
+              console.log(
+                "Deleting video with ID:",
+                subSection.cloudinary_public_id
+              );
+              const result = await cloudinary.uploader.destroy(
+                subSection.cloudinary_public_id,
+                { resource_type: "video" }
+              );
+              console.log("Cloudinary deletion response:", result);
+
+              if (result.result !== "ok") {
+                return res.status(500).json({
+                  message: "Failed to delete video from Cloudinary",
+                  error: result,
+                });
+              }
+            } catch (cloudinaryError) {
+              return res.status(500).json({
+                success: false,
+                message: "Error deleting video from Cloudinary",
+                error: cloudinaryError.message,
+              });
+            }
+          }
+        }
+
+        // Delete sub-sections
+        await SubSection.deleteMany({ _id: { $in: subSections } });
+      }
+
+      // Delete the section
+      await Section.findByIdAndDelete(sectionId);
+    }
+
+    // Delete the course
+    await Course.findByIdAndDelete(courseId);
+
+    return res.status(200).json({
+      success: true,
+      message: "Course and all its content deleted successfully",
+    });
+  } catch (error) {
+    console.error("Error deleting course:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
     });
   }
 };

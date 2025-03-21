@@ -11,7 +11,7 @@ const courseRoutes = require("./routes/Course");
 const dbConnect = require("./config/dbConnect");
 
 //importing cloudinary
-const { cloudinaryConnect } = require("./config/cloudinaryConnect");
+const cloudinaryConnection = require("./config/cloudinaryConnect");
 
 //importing file upload
 const fileUpload = require("express-fileupload");
@@ -25,11 +25,15 @@ const cors = require("cors");
 //importing dotenv
 require("dotenv").config();
 
+// Cloudinary connection
+cloudinaryConnection();
+
 //get port number
 const PORT = process.env.PORT || 4000;
 
 //adding middlewares
 app.use(express.json());
+// app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(
   cors({
@@ -46,8 +50,6 @@ app.use(
 
 //db connection call
 dbConnect.connectDB();
-//cloudinary connection call
-cloudinaryConnect();
 
 //mounting routes
 app.use("/api/v1/auth", userRoutes);

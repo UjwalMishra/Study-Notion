@@ -1,7 +1,6 @@
 // Import the required modules
 const express = require("express");
 const router = express.Router();
-
 // Import the required controllers and middleware functions
 const {
   auth,
@@ -13,6 +12,7 @@ const {
   createCourse,
   getAllCourses,
   getCourseDetails,
+  deleteCourse,
 } = require("../controllers/courseController");
 const {
   createSection,
@@ -34,7 +34,6 @@ const {
   getAvgRating,
   getAllRatingAndReviews,
 } = require("../controllers/ratingAndReviewController");
-
 
 // ********************************************************************************************************
 //                                      Course routes
@@ -69,6 +68,7 @@ router.get("/getCourseDetails", getCourseDetails);
 // Get all Courses Under a Specific Instructor ---> pending
 
 // Delete a Course ---> pending
+router.delete("/deleteCourse", deleteCourse);
 
 //update course progress ---> pending
 

@@ -2,7 +2,7 @@ const Profile = require("../models/Profile");
 const User = require("../models/User");
 
 //update profile
-exports.updateProfile = async (requestAnimationFrame, res) => {
+exports.updateProfile = async (req, res) => {
   try {
     const {
       gender,
@@ -18,14 +18,15 @@ exports.updateProfile = async (requestAnimationFrame, res) => {
     }
     //get user id
     const userId = req.user._id;
+
     //get user profile
-    const userDetails = await User.findById({ userId });
+    const userDetails = await User.findById(userId);
     //get profile id
     const profileId = userDetails.additionalDetails;
 
     //find and update profile
     const updateProfile = await Profile.findByIdAndUpdate(
-      { profileId },
+      profileId,
       {
         gender,
         age,
@@ -65,7 +66,7 @@ exports.deleteAccount = async (req, res) => {
       });
     }
     //get user
-    const userDetails = await User.findById({ userId });
+    const userDetails = await User.findById(userId);
     if (!userDetails) {
       return res.status(400).json({
         success: false,
@@ -111,11 +112,9 @@ exports.getUserDetails = async (req, res) => {
   try {
     const userId = req.user._id;
 
-    const userDetails = await User.findById(userId).populate(
-      "additionalDetails",
-      "courses",
-      "courseProgress"
-    );
+    const userDetails = await User.findById(userId)
+      .populate("additionalDetails")
+      .populate("courses"); //populate("courseProgress" );
 
     if (!userDetails) {
       return res.status(400).json({

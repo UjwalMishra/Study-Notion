@@ -9,7 +9,7 @@ function createTokenForUser(user) {
   };
 
   // Add expiration time
-  const token = JWT.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
+  const token = JWT.sign(payload, process.env.JWT_SECRET, { expiresIn: "24h" });
   return token;
 }
 

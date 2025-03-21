@@ -207,7 +207,7 @@ exports.login = async (req, res) => {
     const token = createTokenForUser(user);
     console.log("Token generated : ", token);
 
-    //user.token = token;
+    user.token = token;
 
     //return res as cookie
     const options = {
