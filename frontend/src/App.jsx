@@ -1,6 +1,16 @@
-import "./App.css";
+import "./index.css";
+import { Routes, Route } from "react-router-dom";
+import Home from "./components/Home";
 function App() {
-  return <></>;
+  return (
+    <>
+      <div className="w-screen min-h-screen bg-richblack-900 flex flex-col font-initer">
+        <Routes>
+          <Route path="/" element={<Home />}></Route>
+        </Routes>
+      </div>
+    </>
+  );
 }
 
 export default App;
