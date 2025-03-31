@@ -121,3 +121,7 @@ html,
 body {
   overflow-x: hidden;
 }
+
+.bg-img {
+  background-image: url("./assets/Images/bghome.svg");
+}

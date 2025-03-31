@@ -6,6 +6,9 @@ import CodeBlocks from "../components/core/HomePage/CodeBlocks";
 import CtaBtn from "../components/core/HomePage/CtaBtn";
 import Banner from "../assets/Images/banner.mp4";
 import Footer from "../components/common/Footer";
+import TimelineSection from "../components/core/HomePage/TimelineSection";
+import LearningLanguageSection from "../components/core/HomePage/LearningLanguageSection";
+import Exploremore from "../components/core/HomePage/Exploremore";
 const Home = () => {
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
 
@@ -31,6 +34,7 @@ const Home = () => {
           }px)`,
         }}
       ></div>
+
       {/* section-1  */}
       <div className="relative mx-auto flex flex-col w-11/12 items-center">
         <Link to={"/signup"}>
@@ -65,12 +69,12 @@ const Home = () => {
           </CtaBtn>
         </div>
 
-        <div className="w-[70%] mt-10 mb-4">
+        {/* <div className="w-[70%] mt-10 mb-4">
           <video src="" autoPlay muted loop>
             {" "}
             <source src={Banner} />
           </video>
-        </div>
+        </div> */}
 
         {/* Code Section 1  */}
         <div className="w-[80%] flex justify-center mt-4 mx-auto">
@@ -131,10 +135,49 @@ const Home = () => {
             backgroundGradient={<div className="codeblock2 absolute"></div>}
           />
         </div>
+        <Exploremore />
       </div>
-      {/* section-2  */}
 
-      <div></div>
+      {/* section-2 --> white part  */}
+
+      <div className="bg-gray-100 text-black w-full">
+        {/* part-1  */}
+        <div className="relative h-[320px] mx-auto bg-img py-4">
+          {/* Content Container */}
+          <div className=" w-full mt-12 flex justify-center items-center p-4">
+            <div className="w-11/12 flex justify-center gap-8">
+              {/* Left Content */}
+              <div className="w-full md:w-[50%] text-center md:text-left">
+                <p className="text-4xl md:text-5xl font-semibold leading-tight">
+                  Get the skills you need for a{" "}
+                  <HighLightText text="job that is in demand" />
+                </p>
+              </div>
+
+              {/* Right Content */}
+              <div className="w-full md:w-[50%] flex flex-col items-center md:items-start">
+                <p className="text-lg md:text-xl text-gray-700">
+                  The modern StudyNotion dictates its own terms. Today, to be a
+                  competitive specialist requires more than professional skills.
+                </p>
+                <div className="mt-8">
+                  <CtaBtn linkto="/signup" active={true}>
+                    Learn More
+                  </CtaBtn>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* part-2  */}
+        <div className="w-full mt-8 flex flex-col items-center justify-center">
+          <div className=" w-10/12 flex flex-col gap-16">
+            <TimelineSection />
+            <LearningLanguageSection />
+          </div>
+        </div>
+      </div>
 
       {/* footer  */}
       <Footer></Footer>
